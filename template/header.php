@@ -1,11 +1,9 @@
-<link rel="stylesheet" type="text/css" href="../css/header.css"/>
 <?php
-  include('../config/DbFunction.php');
-  include('../config/Constant.php');
   // get Instance Database connection
   $obj=new DbFunction();
-
   $chk_first_load = 0;
+  $chk_login = false;
+  $rsAccountInfor = null;
   // ------------------- GET DATA BY NEWS_ID------------------- 
   // Check path parameter in URL
   if (isset($_GET['news_id'])){
@@ -37,14 +35,13 @@
     $rsListnews = $obj->getNewsInfor(NULL, NULL, NULL, $_POST['search_key']);
   }
 
-  if (isset($_GET['logged'])){
-    session_start ();
-    if (! (isset ( $_SESSION ['login_id'] ))) {
-      header ( 'location:home.php' );
-    } else {
-      echo $_SESSION['login_id'];
-    }
-  } 
+  session_start ();
+  if (isset($_SESSION['login_id'])) {
+    $chk_login = true;
+    // Get account infor
+    $rsAccountInfor = $obj->getAccountInfor($_SESSION['login_id']);
+    $display_name = $rsAccountInfor->fetch_object()->display_name;
+  }
 
   // ------------------- GET COMMON DATA ------------------- 
   if ($chk_first_load == 0) {
@@ -67,7 +64,9 @@
 <div class="container">
 	<div class="container_header">
 		<div class="header_icon">
-		  <img class="avatar" src="../images/avatar_hacker.jpg" alt="hacker face" media="header_icon">
+      <div class="icon_image">
+        <a href="home.php"><img class="page_image" src="../images/avatar_hacker.jpg" alt="hacker face" media="header_icon"></a>
+      </div>
 		</div>
 		<div class="header_group">
 		  <div class="group_empty">
@@ -76,8 +75,8 @@
 		  <div class="group_search">
 		    <form action="home.php" method="post">
 		      <label class="search_label" for="search_input">Search:</label>
-		      <input type="text" id="search_key" name="search_key">
-		      <input type="submit" value="Submit" id="search_button">
+		      <input type="text" id="search_key" name="search_key" placeholder="検索キーエントリ">
+		      <input type="submit" value="検索" id="search_button">
 		    </form>
 		  </div>
 		  <div class="group_category">
@@ -87,6 +86,14 @@
 		  </div>
 		</div>
 		<div class="header_account">
-		    <a href="login.php" class="login_link">ログイン</a>
+      <?php 
+        if ($chk_login) {
+          echo "<img class='login_avatar' src='../images/logined.png'>
+                <a href='account/detail.php' class='login_link'>$display_name</a>";
+        } else {
+          echo "<img class='login_avatar' src='../images/nologin.jpg'>
+            <a href='login.php' class='login_link'>ログイン</a>";
+        }
+      ?>
 		</div>
 	</div>

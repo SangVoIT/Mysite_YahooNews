@@ -1,0 +1,40 @@
+/*******************************/
+/* container_header */
+/*******************************/
+.content_left {
+  padding: 0px 10%;
+}
+.left_title {
+  text-align: left;
+}
+.left_create {
+  text-align: left;
+}
+
+.create_content {
+  font-size: 18px;
+}
+.create_title {
+  text-align: 
+}
+.create_date {
+  
+}
+.create_type {
+  
+}
+.create_source {
+  
+}
+.create_content {
+  
+}
+.submit_btn {
+  text-align: center;
+}
+.submit_btn input{
+  width: 30%;
+}
+.submit_btn input:hover{
+  color: orange;
+}

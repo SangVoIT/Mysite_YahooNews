@@ -39,14 +39,21 @@
 }
 .header_account {
   width: 20%;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
+
 .account_login{
   width: 100%;
   text-align: center;
 }
 
+img.login_avatar {
+  width: 20%;
+  width: 20%;
+}
 a.login_link {
 }
 a.login_link:hover {

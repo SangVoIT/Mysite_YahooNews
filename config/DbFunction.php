@@ -6,7 +6,7 @@ class DbFunction{
 
 	// Function: Check login account
 	// Parameter: $loginid, $password
-	function login($loginid,$password){
+	function checkLogin($loginid,$password){
 
 		if(!ctype_alnum($loginid) || !ctype_alnum($password)){
 			header("location:login.php?Error=Please enter valid character in fill");
@@ -23,7 +23,6 @@ class DbFunction{
 
 			else{
 
-				echo "$query";
 				$stmt->bind_param('ss',$loginid,$password);
 				$stmt->execute();
 				$stmt -> bind_result($loginid,$password);
@@ -38,6 +37,42 @@ class DbFunction{
 			}
 
 		}
+	}
+
+	// Function: Check login account
+	// Parameter: $loginid, $password
+	function getAccountInfor($loginid){
+		if ($loginid == null) {
+			header('location:home.php');
+		}
+		$db = Database::getInstance();
+		$mysqli = $db->getConnection();
+		$query = "SELECT *
+					FROM account where loginid = '$loginid'";
+		$stmt= $mysqli->query($query);
+		return $stmt;
+	}
+
+	// Function: Insert new information
+	// Parameter: $loginid, $password
+	function createNewsInfor($news_title, $news_type, $news_source, $news_content, $loginid){
+		if ($loginid == null) {
+			header('location:home.php');
+		}
+		$db = Database::getInstance();
+		$mysqli = $db->getConnection();
+		$query = "INSERT INTO news_infor (title, news_type, news_source, cotent, create_id) VALUES (?, ?, ?, ?, ?) ";
+		echo "xxx:" .$query;
+		$stmt= $mysqli->prepare($query);
+		if(false===$stmt){
+			trigger_error("Error in query: " . mysqli_connect_error(),E_USER_ERROR);
+		}
+		else{
+			$stmt->bind_param('sssss',$news_title,$news_type,$news_source,$news_content,$loginid);
+			$stmt->execute();
+			echo "<script>alert('Course Added Successfully')</script>";
+		}
+		return $stmt;
 	}
 
 
@@ -124,8 +159,26 @@ class DbFunction{
 		$query = "SELECT nt.type_cd, nt.type_name
 					FROM  news_type nt 
 					WHERE nt.delete_flg = 0 ";
-		if ($news_type != 0) {
-			$query = $query . " AND nt.id = $news_type";
+		if ($news_type != NULL) {
+			$query = $query . " AND nt.type_cd = $news_type";
+		}
+		$stmt= $mysqli->query($query);
+		return $stmt;
+	}
+
+	// Function: Get list of news source
+	// Parameter: news_source
+	// Case 0: select all
+	// Case <>: select by ID
+	function getNewsSource($news_source){
+		
+		$db = Database::getInstance();
+		$mysqli = $db->getConnection();
+		$query = "SELECT ns.source_cd, ns.source_name
+					FROM  news_source ns 
+					WHERE ns.delete_flg = 0 ";
+		if ($news_source != NULL) {
+			$query = $query . " AND ns.source_cd = $news_source";
 		}
 		$stmt= $mysqli->query($query);
 		return $stmt;

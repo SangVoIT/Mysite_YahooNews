@@ -1,0 +1,19 @@
+.content_footer {
+  text-align: center;
+}
+.footer_footbar {
+  display: inline-flex;
+  margin: 5px;
+}
+.footbar_privacy {
+  margin: 0px 5px;
+}
+.footbar_help {
+  margin: 0px 5px;
+}
+.footbar_ask {
+  margin: 0px 5px;
+}
+.footer_copyright {
+  
+}

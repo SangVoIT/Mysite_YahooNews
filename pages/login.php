@@ -7,7 +7,7 @@ if(isset($_POST['login_id'])){
   session_start ();
   $obj=new DbFunction();
   $_SESSION['login_id']=$_POST['login_id'];
-  $obj->login($_POST['login_id'],$_POST['password']);
+  $obj->checkLogin($_POST['login_id'],$_POST['password']);
 }
 ?>
 <br>
