@@ -10,37 +10,43 @@
           <input type="submit" class="createpost_btn" name="今すぐ投稿" value="insert" />
         </form>
       </div>
-      <?php while($res=$rsListnews->fetch_object()){?>              
-      <div class="content_detail">
-        <div class="detail_infor">
-          <div class="infor_avatar">
-            <img class="avatar" src="../images/logined.png" alt="hacker face" media="infor_avatar">
+      <div class="content_grid">
+        <?php 
+        $image_path = "";
+        while($res=$rsListnews->fetch_object()){?>
+        <div class="grid_detail">
+          <div class="detail_infor">
+            <div class="infor_avatar">
+             <?php 
+             $image_path = CN_IMAGE_PATH.$res->image;
+             echo "<img class='news_image' src='$image_path' alt='News_image' media='infor_avatar'>"; ?>
+            </div>
           </div>
+          <div class="detail_news">
+            <div class="news_title">
+              <?php echo "<a href='detail.php?news_id=$res->id'>$res->title</a>"; ?>
+            </div>
+            <div class="news_source">
+              <?php echo "<a href='home.php?news_source=$res->source_cd'>$res->source_name</a>"; ?>
+            </div>
+            <div class="infor_name">
+              <?php echo htmlentities($res->type_name);?>
+            </div>
+          </div>
+          <!-- <div class="detail_vote">
+            <div class="vote_up">
+              up
+            </div>
+            <div class="vote_rank">
+              <?php echo htmlentities($res->view_number);?>
+            </div>
+            <div class="vote_down">
+              down
+            </div>
+          </div> -->
         </div>
-        <div class="detail_news">
-          <div class="news_title">
-            <?php echo "<a href='detail.php?news_id=$res->id'>$res->title</a>"; ?>
-          </div>
-          <div class="news_source">
-            <?php echo "<a href='home.php?news_source=$res->source_cd'>$res->source_name</a>"; ?>
-          </div>
-          <div class="infor_name">
-            <?php echo htmlentities($res->type_name);?>
-          </div>
-        </div>
-        <!-- <div class="detail_vote">
-          <div class="vote_up">
-            up
-          </div>
-          <div class="vote_rank">
-            <?php echo htmlentities($res->view_number);?>
-          </div>
-          <div class="vote_down">
-            down
-          </div>
-        </div> -->
+        <?php }?> 
       </div>
-      <?php }?> 
 
       <!-- <div class="left_paging">
         [1][<][>][>>]
@@ -68,17 +74,18 @@ container
     content_left
       content_createpost
         createpost_btn
-      content_detail
-        detail_infor
-          infor_avatar
-        detail_news
-          news_title
-          news_source
-          infor_name
-        detail_vote
-          vote_up
-          vote_rank
-          vote_down
+      content_grid
+        grid_detail
+          detail_infor
+            infor_avatar
+          detail_news
+            news_title
+            news_source
+            infor_name
+          /* detail_vote
+          /*   vote_up
+          /*   vote_rank
+          /*   vote_down
       left_paging
     content_right
       right_recent_news

@@ -28,7 +28,7 @@
           <div class="main_image">
             <img class="avatar" src="../images/avatar_hacker.jpg" alt="hacker face" media="header_icon">
           </div>
-          <div class="main_content"><?php echo "$res->cotent"; ?></div>
+          <p class="main_content"><?php echo "    $res->cotent"; ?></p>
         </div>
         <?php 
           $type_cd = $res->type_cd;
@@ -44,10 +44,15 @@
           // get list of newest news
           $rsListOfRelatedNews = $obj->getRelatedNews($type_cd, $source_cd, CN_related_news_code);
         ?>
-        <?php while($res=$rsListOfRelatedNews->fetch_object()){?>  
+        <?php 
+        $image_path = "";
+        while($res=$rsListOfRelatedNews->fetch_object()){?>  
         <div class="suggest_block">
           <div class="block_image">
-            <img class="avatar" src="../images/avatar_hacker.jpg" alt="hacker face" media="header_icon"></div>
+             <?php 
+             $image_path = CN_IMAGE_PATH.$res->image;
+             echo "<img class='news_image' src='$image_path' alt='News_image' media='infor_avatar'>"; ?>
+          </div>
           <div class="block_title">
             <?php echo "<a href='detail.php?news_id=$res->id'>$res->title</a>"; ?>
           </div>

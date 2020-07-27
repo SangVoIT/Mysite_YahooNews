@@ -1,8 +1,6 @@
-.content_detail {
-  display: inline-flex;
-  border-bottom: 1px solid #DCDCDC;
-  height: 100%; 
-}
+/***
+content_createpost
+****/
 .content_createpost {
   width: 100%;
   text-align: center;
@@ -17,6 +15,18 @@ input.createpost_btn:hover {
 /***
 detail_infor
 ****/
+.content_grid {
+  display: block;
+  width: 100%;
+  height: 18%;
+  min-width: 700px;
+  min-height: 100px;
+}
+.grid_detail {
+  display: inline-flex;
+  border-bottom: 1px solid #DCDCDC;
+  height: 100%; 
+}
 .detail_infor {
   width: 30%;
   height: 100%;

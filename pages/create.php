@@ -21,6 +21,7 @@ if (!isset($_SESSION['login_id'])) {
       $_POST['news_title'],
       $_POST['news_type'],
       $_POST['news_source'],
+      $_FILES['news_image'],
       $_POST['news_content'],
       $_SESSION['login_id']);
   }
@@ -34,7 +35,7 @@ if (!isset($_SESSION['login_id'])) {
       ニュース投稿
     </h3>
     <div class="left_create">
-      <form action="create.php" method="post">
+      <form action="create.php" method="post" enctype="multipart/form-data">
         <table style="width:100%">
           <tr class="create_title">
             <td>タイトル: </td>
@@ -60,10 +61,19 @@ if (!isset($_SESSION['login_id'])) {
               </select>
             </td>
           </tr>
+          <tr class="create_image">
+            <td>写真: </td>
+            <td>
+              <div>
+                <input type="file" name="news_image">
+              </div>
+            </td>
+          </tr>
           <tr>
             <td>内容: </td>
             <td>
-              <textarea type="text" name="news_content"></textarea>
+              <textarea type="text" name="news_content" cols="40" rows="4">
+              </textarea>
             </td>
           </tr>
         </table>
@@ -84,5 +94,6 @@ content_left
   create_title
   create_type
   create_source
+  create_image
   create_content
 -->

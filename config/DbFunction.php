@@ -55,26 +55,45 @@ class DbFunction{
 
 	// Function: Insert new information
 	// Parameter: $loginid, $password
-	function createNewsInfor($news_title, $news_type, $news_source, $news_content, $loginid){
+	function createNewsInfor($news_title, $news_type, $news_source, $obj_image, $news_content, $loginid){
 		if ($loginid == null) {
 			header('location:home.php');
 		}
+
+	  	// Select file type
+	  	$imageName = $obj_image['name'];
+	  	$imageFileType = strtolower(pathinfo($imageName,PATHINFO_EXTENSION));
+
+		// Valid file extensions
+	  	$extensions_arr = array("jpg","jpeg","png","gif");
+
+		// Check extension
+		if(!in_array($imageFileType,$extensions_arr) ){
+			header("location:create.php?error='this file is not a valid file name...'");
+		}
+
 		$db = Database::getInstance();
 		$mysqli = $db->getConnection();
-		$query = "INSERT INTO news_infor (title, news_type, news_source, cotent, create_id) VALUES (?, ?, ?, ?, ?) ";
-		echo "xxx:" .$query;
+		$query = "INSERT INTO news_infor (title, news_type, news_source, cotent, image, create_id) VALUES (?, ?, ?, ?, ?, ?)";
 		$stmt= $mysqli->prepare($query);
 		if(false===$stmt){
 			trigger_error("Error in query: " . mysqli_connect_error(),E_USER_ERROR);
 		}
 		else{
-			$stmt->bind_param('sssss',$news_title,$news_type,$news_source,$news_content,$loginid);
+			$stmt->bind_param('ssssss',$news_title,$news_type,$news_source,$news_content, $imageName, $loginid);
 			$stmt->execute();
 			echo "<script>alert('Course Added Successfully')</script>";
+  			$target_file = CN_IMAGE_PATH.basename($imageName);
+		  	if (move_uploaded_file($obj_image['tmp_name'], $target_file)) {
+		  		$msg = "Image uploaded successfully";
+		  		// redirect: home pages
+				header('location:home.php');
+		  	}else{
+		  		$msg = "Failed to upload image";
+		  	}
 		}
 		return $stmt;
 	}
-
 
 	// Function: Get list of news 
 	// Parameter: 
@@ -84,7 +103,7 @@ class DbFunction{
 		
 		$db = Database::getInstance();
 		$mysqli = $db->getConnection();
-		$query = "SELECT ni.id, nt.type_cd, nt.type_name, ns.source_cd, ns.source_name, ni.title, ni.cotent, ni.view_number, ni.vote_star, ni.create_date , ni.update_date
+		$query = "SELECT ni.id, nt.type_cd, nt.type_name, ns.source_cd, ns.source_name, ni.title, ni.cotent, ni.image, ni.view_number, ni.vote_star, ni.create_date , ni.update_date
 					FROM news_infor ni 
 					LEFT JOIN news_type nt 
 					ON (ni.news_type = nt.type_cd) 
@@ -109,7 +128,6 @@ class DbFunction{
 		if ($search_key != NULL) {
 			$query = $query . " AND ni.title LIKE '%$search_key%' ";
 		} 
-		// echo "$query";
 		$stmt= $mysqli->query($query);
 		return $stmt;
 	}
@@ -122,7 +140,7 @@ class DbFunction{
 		
 		$db = Database::getInstance();
 		$mysqli = $db->getConnection();
-		$query = "SELECT ni.id, ns.source_cd, ns.source_name, ni.title 
+		$query = "SELECT ni.id, ns.source_cd, ns.source_name, ni.title, ni.image
 					FROM news_infor ni 
 					LEFT JOIN news_source ns 
 					ON (ni.news_source = ns.source_cd) 
@@ -192,7 +210,7 @@ class DbFunction{
 		
 		$db = Database::getInstance();
 		$mysqli = $db->getConnection();
-		$query = "SELECT ni.id, nt.type_cd, nt.type_name, ns.source_cd, ns.source_name, ni.title, ni.view_number, ni.create_date , ni.update_date
+		$query = "SELECT ni.id, nt.type_cd, nt.type_name, ns.source_cd, ns.source_name, ni.title, ni.view_number, ni.image, ni.create_date , ni.update_date
 					FROM news_infor ni 
 					LEFT JOIN news_type nt 
 					ON (ni.news_type = nt.type_cd) 
